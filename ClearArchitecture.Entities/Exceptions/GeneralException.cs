@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ClearArchitecture.Entities.Exceptions
 {
-    class GeneralException:Exception
+    public class GeneralException:Exception
     {
         public string Detail { get; set; }
         public GeneralException() {}
