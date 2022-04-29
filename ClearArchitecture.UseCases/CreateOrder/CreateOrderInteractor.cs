@@ -48,12 +48,12 @@ namespace ClearArchitecture.UseCases.CreateOrder
             {
                 await UnitOfWork.SaveChangesAsync();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw new GeneralException("Error al crear la orden.", ex.Message);
             }
             return Order.Id;
-            }
         }
+    
     }
 }
