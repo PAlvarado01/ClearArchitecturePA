@@ -1,5 +1,7 @@
+using ClearArchitecture.Entities.Exceptions;
 using ClearArchitecture.IoC;
 using ClearArchitecture.WebExceptionsPresenter;
+using FluentValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -28,8 +30,12 @@ namespace ClearArchitecture.WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //Upgrade
-            services.AddControllers(Filters.Register);
+
+            services.AddControllers(options => options.Filters.Add(new ApiExceptionFilterAttribute(new Dictionary<Type, IExceptionHandler>
+            {
+                {typeof(GeneralException), new GeneralExceptionHandler()},
+                {typeof(ValidationException), new ValidationExceptionHandler()}
+            })));
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ClearArchitecture.WebApi", Version = "v1" });
