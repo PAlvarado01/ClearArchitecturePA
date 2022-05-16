@@ -1,39 +1,47 @@
 ﻿using ClearArchitecture.Entities.Interfaces;
 using ClearArchitecture.Entities.CAEntities;
 using ClearArchitecture.Entities.Exceptions;
-using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using ClearArchitecture.UseCasesPorts.CreateOrder;
+using ClearArchitecture.UseCasesDTOs.CreateOrder;
+using ClearArchitecture.UseCases.Common.Validators;
+using FluentValidation;
 
 namespace ClearArchitecture.UseCases.CreateOrder
 {
-    public class CreateOrderInteractor : AsyncRequestHandler<CreateOrderInputPort>
+    public class CreateOrderInteractor : ICreateOrderInputPort
     {
         readonly IOrderRepository OrderRepository;
         readonly IOrderDetailRepository OrderDetailRepository;
         readonly IUnitOfWork UnitOfWork;
-        public CreateOrderInteractor(IOrderRepository orderRepository, IOrderDetailRepository orderDetailRepository, IUnitOfWork unitOfWork) =>
-        (OrderRepository, OrderDetailRepository, UnitOfWork) = (orderRepository, orderDetailRepository, unitOfWork);
-        protected async override Task Handle(CreateOrderInputPort request, CancellationToken cancellationToken)
+        readonly ICreateOrderOutputPort CreateOrderOutputPort;
+        readonly IEnumerable<IValidator<CreateOrderParams>> Validators;
+        public CreateOrderInteractor(IOrderRepository orderRepository, IOrderDetailRepository orderDetailRepository, IUnitOfWork unitOfWork, ICreateOrderOutputPort createOrderOutputPort, IEnumerable<IValidator<CreateOrderParams>> validators) =>
+        (OrderRepository, OrderDetailRepository, UnitOfWork, CreateOrderOutputPort, Validators) = (orderRepository, orderDetailRepository, unitOfWork, createOrderOutputPort, validators);
+
+        public async Task Handle(CreateOrderParams order)
         {
+            await Validator<CreateOrderParams>.Validate(order, Validators); 
+
             Order Order = new Order
             {
-                CustomerId = request.RequestData.CustomerId,
+                CustomerId = order.CustomerId,
                 OrderDate = DateTime.Now,
-                ShipAddress = request.RequestData.ShipAddress,
-                ShipCity = request.RequestData.ShipCity,
-                ShipCountry = request.RequestData.ShipCountry,
-                ShipPostalCode = request.RequestData.ShipPostalCode,
+                ShipAddress = order.ShipAddress,
+                ShipCity = order.ShipCity,
+                ShipCountry = order.ShipCountry,
+                ShipPostalCode = order.ShipPostalCode,
                 ShippingType = Entities.Enums.ShippingType.Road,
                 DiscountType = Entities.Enums.DiscountType.Percentage,
                 Discount = 10
             };
             OrderRepository.Create(Order);
-            foreach (var Item in request.RequestData.OrderDetails)
+            foreach (var Item in order.OrderDetails)
             {
                 OrderDetailRepository.Create(
                     new OrderDetail
@@ -52,7 +60,7 @@ namespace ClearArchitecture.UseCases.CreateOrder
             {
                 throw new GeneralException("Error al crear la orden.", ex.Message);
             }
-            request.OutputPort.Handle(Order.Id);
+            await CreateOrderOutputPort.Handle(Order.Id);
         }
     
     }

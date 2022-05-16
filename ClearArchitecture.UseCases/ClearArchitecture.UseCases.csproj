@@ -6,12 +6,12 @@
 
   <ItemGroup>
     <PackageReference Include="fluentvalidation" Version="10.4.0" />
-    <PackageReference Include="Mediatr" Version="10.0.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\ClearArchitecture.Entities\ClearArchitecture.Entities.csproj" />
     <ProjectReference Include="..\ClearArchitecture.UseCasesDTOs\ClearArchitecture.UseCasesDTOs.csproj" />
+    <ProjectReference Include="..\ClearArchitecture.UseCasesPorts\ClearArchitecture.UseCasesPorts.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,7 +1,7 @@
 ﻿using ClearArchitecture.Presenters;
 using ClearArchitecture.UseCases.CreateOrder;
 using ClearArchitecture.UseCasesDTOs.CreateOrder;
-using MediatR;
+using ClearArchitecture.UseCasesPorts.CreateOrder;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
@@ -12,14 +12,15 @@ namespace ClearArchitecture.Controllers
     [ApiController]
     public class OrderController
     {
-        readonly IMediator Mediator;
-        public OrderController(IMediator mediator) =>
-            Mediator = mediator;
+        readonly ICreateOrderInputPort InputPort;
+        readonly ICreateOrderOutputPort OutputPort;
+        public OrderController(ICreateOrderInputPort inputPort, ICreateOrderOutputPort outputPort) =>
+            (InputPort, OutputPort) = (inputPort, outputPort);
         [HttpPost("create-order")]
         public async Task<string> CreateOrder(CreateOrderParams orderparams)
         {
-            CreateOrderPresenter Presenter = new CreateOrderPresenter();
-            await  Mediator.Send(new CreateOrderInputPort(orderparams,Presenter));
+            await InputPort.Handle(orderparams);
+            var Presenter = OutputPort as CreateOrderPresenter;
             return Presenter.Content;
         }
     }

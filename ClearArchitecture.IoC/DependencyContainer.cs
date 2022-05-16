@@ -1,10 +1,11 @@
 ﻿using ClearArchitecture.Entities.Interfaces;
+using ClearArchitecture.Presenters;
 using ClearArchitecture.Repositories.EFCore.DataContext;
 using ClearArchitecture.Repositories.EFCore.Repositories;
-using ClearArchitecture.UseCases.Common.Behaviors;
+using ClearArchitecture.UseCases.Common.Validators;
 using ClearArchitecture.UseCases.CreateOrder;
+using ClearArchitecture.UseCasesPorts.CreateOrder;
 using FluentValidation;
-using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -25,9 +26,10 @@ namespace ClearArchitecture.IoC
             services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-            services.AddMediatR(typeof(CreateOrderInteractor));
             services.AddValidatorsFromAssembly(typeof(CreateOrderValidator).Assembly);
-            services.AddTransient(typeof(IPipelineBehavior<,>),typeof(ValidationBehavior<,>));
+            services.AddScoped<ICreateOrderInputPort,CreateOrderInteractor>();
+            services.AddScoped<ICreateOrderOutputPort, CreateOrderPresenter>();
+            
             return services;
         }
     }
