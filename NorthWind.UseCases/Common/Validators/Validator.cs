@@ -21,6 +21,7 @@ namespace NorthWind.UseCases.Common.Validators
                 throw new ValidationException(failures);
             }
             return Task.FromResult(failures);
+            //bulkload
         }
     }
 }
