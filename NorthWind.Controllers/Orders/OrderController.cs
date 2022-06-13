@@ -12,9 +12,9 @@ namespace NorthWind.Controllers.Orders
     [ApiController]
     public class OrderController
     {
-        readonly GetAllOrdersInputPort InputPort;
+        readonly IGetAllOrdersInputPort InputPort;
         readonly IGetAllOrdersOutputPort OutputPort;
-        public OrderController(GetAllOrdersInputPort inputPort, IGetAllOrdersOutputPort outputPort)
+        public OrderController(IGetAllOrdersInputPort inputPort, IGetAllOrdersOutputPort outputPort)
         {
             this.InputPort = inputPort;
             this.OutputPort = outputPort;

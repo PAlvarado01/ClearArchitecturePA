@@ -15,14 +15,14 @@ using System.Threading.Tasks;
 
 namespace NorthWind.UseCases.GetAllOrders
 {
-    public class GetAllOrdersIterator : GetAllOrdersInputPort
+    public class GetAllOrdersInteractor : IGetAllOrdersInputPort
     {
         readonly IOrderDetailRepository orderDetailRepository;
         readonly IProductRepository productRepository;
         readonly IGetAllOrdersOutputPort outputPort;
         readonly IEnumerable<IValidator<GetAllOrdersParams>> validators;
 
-        public GetAllOrdersIterator(IOrderDetailRepository orderDetailRepository,
+        public GetAllOrdersInteractor(IOrderDetailRepository orderDetailRepository,
             IProductRepository productRepository, IGetAllOrdersOutputPort outputPort, IEnumerable<IValidator<GetAllOrdersParams>> validators
             )
         {
@@ -36,7 +36,7 @@ namespace NorthWind.UseCases.GetAllOrders
         {
             await Validator<GetAllOrdersParams>.Validate(order, validators);
 
-            var output = new IGetAllOrdersOutputPort();
+            var output = new GetAllOrdersOutputPort();
             output.Orders = new List<GetAllOrder>();
 
             try
@@ -85,7 +85,7 @@ namespace NorthWind.UseCases.GetAllOrders
                 throw new GeneralException("Error getting order", ex.Message);
             }
 
-            await outputPort.Handler(output);
+            await outputPort.Handle(output);
         }
     }
 }

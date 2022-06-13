@@ -1,7 +1,7 @@
-﻿using FluentValidation;
-using NorthWind.UseCasesDTOs.GetAllOrders;
+﻿using NorthWind.UseCasesDTOs.GetAllOrders;
+using FluentValidation;
 
-namespace NorthWind.UseCases.GetAllOrders
+namespace NorthWind.UseCases.Common.Validators.GetAllOrders
 {
     public class GetAllOrdersValidator : AbstractValidator<GetAllOrdersParams>
     {

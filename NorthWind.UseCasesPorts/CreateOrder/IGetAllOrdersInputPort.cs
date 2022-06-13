@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace NorthWind.UseCasesPorts.CreateOrder
 {
-    public interface GetAllOrdersInputPort
+    public interface IGetAllOrdersInputPort
     {
         Task Handle(GetAllOrdersParams order);
     }

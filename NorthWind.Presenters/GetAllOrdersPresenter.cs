@@ -1,4 +1,5 @@
 ﻿using NorthWind.Presenters.GetAllOrdersDTO;
+using NorthWind.UseCasesDTOs.GetAllOrders;
 using NorthWind.UseCasesPorts.CreateOrder;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,11 +10,10 @@ namespace NorthWind.Presenters
     public class GetAllOrdersPresenter : IGetAllOrdersOutputPort, IPresenter<GetAllOrdersOutput>
     {
         public GetAllOrdersOutput Content { get; private set; }
-        public List<GetAllOrder> Orders { get ; set; }
 
-        public void Handler(IGetAllOrdersOutputPort response)
+        public Task Handle(GetAllOrdersOutputPort outputPort)
         {
-            var orders = response.Orders
+            var orders = outputPort.Orders
                 .Select(s => new Order
                 {
                     OrderDate = s.OrderDate,
@@ -34,10 +34,12 @@ namespace NorthWind.Presenters
                 })
                 .ToList();
 
-            Content = new GetAllOrdersOutput() 
-            { 
-                Orders = orders 
+            Content = new GetAllOrdersOutput()
+            {
+                Orders = orders
             };
+
+            return Task.CompletedTask;
         }
     }
 }

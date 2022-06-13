@@ -1,54 +1,11 @@
-﻿using NorthWind.Entities.Enums;
-using System;
-using System.Collections.Generic;
+﻿using NorthWind.UseCasesDTOs.GetAllOrders;
+using System.Threading.Tasks;
 
 namespace NorthWind.UseCasesPorts.CreateOrder
 {
     public interface IGetAllOrdersOutputPort
     {
-        public List<GetAllOrder> Orders { get; set; }
-    }
-    public class GetAllOrder
-    {
-        public DateTime OrderDate { get; private set; }
-        public string ShipAddress { get; private set; }
-        public string ShipCity { get; private set; }
-        public string ShipCountry { get; private set; }
-        public string ShipPostalCode { get; private set; }
-        public DiscountType DiscountType { get; private set; }
-        public double Discount { get; set; }
-        public ShippingType shippingType { get; set; }
-        public List<GetAllOrderDetail> OrderDetails { get;  set; }
-
-        public GetAllOrder(DateTime orderDate, string shipAddress,
-            string shipCity, string shipCountry, string shipPostalCode,
-            DiscountType discountType, double discount, ShippingType shippingType)
-        {
-            OrderDate = orderDate;
-            ShipAddress = shipAddress;
-            ShipCity = shipCity;
-            ShipCountry = shipCountry;
-            ShipPostalCode = shipPostalCode;
-            DiscountType = discountType;
-            Discount = discount;
-            this.shippingType = shippingType;
-        }
-
-        public void SetOrderDetails(List<GetAllOrderDetail> orderDetails)
-            => OrderDetails = orderDetails;
+        Task Handle(GetAllOrdersOutputPort outputPort);
     }
 
-    public class GetAllOrderDetail
-    {
-        public string Product { get; private set; }
-        public decimal UnitPrice { get; private set; }
-        public short Quantity { get; private set; }
-
-        public GetAllOrderDetail(string product, decimal unitPrice, short quantity)
-        {
-            Product = product;
-            UnitPrice = unitPrice;
-            Quantity = quantity;
-        }
-    }
 }

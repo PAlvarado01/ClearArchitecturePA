@@ -8,17 +8,16 @@ using NorthWind.Repositories.EFCore.DataContext;
 using NorthWind.Repositories.EFCore.Repositories;
 using NorthWind.UseCases.Common.Validators;
 using NorthWind.UseCases.CreateOrder;
+using NorthWind.UseCases.GetAllOrders;
 using NorthWind.UseCasesPorts.CreateOrder;
 
 namespace NorthWind.IoC
 {
     public static class DependecyContainer
     {
-        public static IServiceCollection AddNorthWindService(this IServiceCollection services,
-            IConfiguration configuration)
+        public static IServiceCollection AddNorthWindService(this IServiceCollection services,IConfiguration configuration)
         {
-            services.AddDbContext<NorthWindContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("NorthWindDB")));
+            services.AddDbContext<NorthWindContext>(options => options.UseSqlServer(configuration.GetConnectionString("NorthWindDB")));
 
             services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
@@ -26,8 +25,15 @@ namespace NorthWind.IoC
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.AddValidatorsFromAssembly(typeof(CreateOrderValidator).Assembly);
+            services.AddValidatorsFromAssembly(typeof(GetAllOrdersValidator).Assembly);
+
+            // Create Order
             services.AddScoped<ICreateOrderInputPort, CreateOrderInteractor>();
             services.AddScoped<ICreateOrderOutputPort, CreateOrderPresenter>();
+
+            //Get Orders By Customer
+            services.AddScoped<IGetAllOrdersInputPort, GetAllOrdersInteractor>();
+            services.AddScoped<IGetAllOrdersOutputPort, GetAllOrdersPresenter>();
 
             return services;
         }
