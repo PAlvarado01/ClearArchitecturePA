@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using NorthWind.Presenters;
-using NorthWind.Presenters.GetAllOrdersDTO;
-using NorthWind.UseCases.CreateOrder;
 using NorthWind.UseCasesDTOs.CreateOrder;
 using NorthWind.UseCasesPorts.CreateOrder;
 using System.Threading.Tasks;

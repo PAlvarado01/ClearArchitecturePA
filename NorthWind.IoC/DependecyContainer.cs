@@ -10,6 +10,7 @@ using NorthWind.UseCases.Common.Validators;
 using NorthWind.UseCases.CreateOrder;
 using NorthWind.UseCases.GetAllOrders;
 using NorthWind.UseCasesPorts.CreateOrder;
+using NorthWind.UseCasesPorts.BulkLoad;
 
 namespace NorthWind.IoC
 {
@@ -34,6 +35,10 @@ namespace NorthWind.IoC
             //Get Orders By Customer
             services.AddScoped<IGetAllOrdersInputPort, GetAllOrdersInteractor>();
             services.AddScoped<IGetAllOrdersOutputPort, GetAllOrdersPresenter>();
+
+            //BulkLoad
+            services.AddScoped<IBulkLoadInputPort, BulkLoadInteractor>();
+            services.AddScoped<IBulkLoadOutputPort, BulkLoadPresenter>(); 
 
             return services;
         }

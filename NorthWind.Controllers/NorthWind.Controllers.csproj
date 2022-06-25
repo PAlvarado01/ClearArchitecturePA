@@ -5,11 +5,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Google.Api.CommonProtos" Version="2.6.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.2.7" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
+    <PackageReference Include="System.Net.Http" Version="4.3.4" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\NorthWind.Presenters\NorthWind.Presenters.csproj" />
+    <ProjectReference Include="..\NorthWind.Repositories.EFCore\NorthWind.Repositories.EFCore.csproj" />
     <ProjectReference Include="..\NorthWind.UseCases\NorthWind.UseCases.csproj" />
   </ItemGroup>
 
