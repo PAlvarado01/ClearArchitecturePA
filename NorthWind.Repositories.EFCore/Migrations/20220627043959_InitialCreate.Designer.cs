@@ -10,7 +10,7 @@ using NorthWind.Repositories.EFCore.DataContext;
 namespace NorthWind.Repositories.EFCore.Migrations
 {
     [DbContext(typeof(NorthWindContext))]
-    [Migration("20220502020423_InitialCreate")]
+    [Migration("20220627043959_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -20,6 +20,38 @@ namespace NorthWind.Repositories.EFCore.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.16")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("NorthWind.Entities.POCOEntities.Archivo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(5)
+                        .HasColumnType("int")
+                        .IsFixedLength(true)
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Extension")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<double>("Tamanio")
+                        .HasMaxLength(53)
+                        .HasColumnType("float");
+
+                    b.Property<string>("Ubicacion")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Archivos");
+                });
 
             modelBuilder.Entity("NorthWind.Entities.POCOEntities.Customer", b =>
                 {

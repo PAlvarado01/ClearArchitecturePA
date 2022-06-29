@@ -24,6 +24,7 @@ namespace NorthWind.IoC
             services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IBulkLoadRepository, BulkLoadRepository>();
 
             services.AddValidatorsFromAssembly(typeof(CreateOrderValidator).Assembly);
             services.AddValidatorsFromAssembly(typeof(GetAllOrdersValidator).Assembly);

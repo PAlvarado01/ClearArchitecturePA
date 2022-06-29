@@ -4,7 +4,7 @@ namespace NorthWind.UseCasesDTOs.BulkLoad
 {
     public class BulkLoadOutputPort
     {
-        public List<BulkLoad> File { get; set; }
+        public List<BulkLoad> Files { get; set; }
     }
 
     public class BulkLoad
@@ -15,6 +15,6 @@ namespace NorthWind.UseCasesDTOs.BulkLoad
         public double Tamanio { get; set; }
         public string Ubicacion { get; set; }
 
-        public BulkLoad(int id, string name, string extension, double tamanio, string ubicacion) { Id = id; Nombre = name; Extension= extension; Tamanio = tamanio; Ubicacion = ubicacion; }
+        public BulkLoad(int id,string name, string extension, double tamanio, string ubicacion) { Id = id; Nombre = name; Extension= extension; Tamanio = tamanio; Ubicacion = ubicacion; }
     }
 }

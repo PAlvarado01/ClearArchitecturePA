@@ -1,13 +1,10 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using NorthWind.Entities.POCOEntities;
-using NorthWind.Repositories.EFCore.DataContext;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NorthWind.Presenters;
 using NorthWind.Presenters.GetAllOrdersDTO;
-using NorthWind.UseCasesDTOs.BulkLoad;
 using NorthWind.UseCasesPorts.BulkLoad;
+using System;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace NorthWind.Controllers
@@ -30,7 +27,19 @@ namespace NorthWind.Controllers
         {
             await InputPort.Handle(loadParams);
 
+            /*if (loadParams.Length == 0)
+            { 
+                using (var ms = new MemoryStream())
+                {
+                    loadParams.CopyTo(ms);
+                    var fileBytes = ms.ToArray();
+                    var base64 = Convert.ToBase64String(fileBytes);
+                    var request = new UploadUseCaseRequest((Domain.Upload.Enum.UploadTypeEnum)input.Type, input.File.FileName, base64, user?.LoginName);
+                    uploadUseCase.Execute(request);
+                }
+            }*/
             var Presenter = OutputPort as BulkLoadPresenter;
+
             return Presenter.Content;
         } 
         /*

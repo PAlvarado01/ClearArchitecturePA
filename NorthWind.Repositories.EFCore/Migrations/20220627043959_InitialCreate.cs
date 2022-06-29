@@ -8,6 +8,22 @@ namespace NorthWind.Repositories.EFCore.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Archivos",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", fixedLength: true, maxLength: 5, nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Nombre = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Extension = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
+                    Tamanio = table.Column<double>(type: "float", maxLength: 53, nullable: false),
+                    Ubicacion = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Archivos", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Customers",
                 columns: table => new
                 {
@@ -118,6 +134,9 @@ namespace NorthWind.Repositories.EFCore.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Archivos");
+
             migrationBuilder.DropTable(
                 name: "OrderDetails");
 

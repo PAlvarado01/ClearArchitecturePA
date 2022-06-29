@@ -13,10 +13,10 @@ namespace NorthWind.Presenters
 
         public Task Handle(BulkLoadOutputPort outputPort)
         {
-            var archivos = outputPort.File.
-                Select(s => new File
+            var archivos = outputPort.Files
+                .Select(s => new File
                 {
-                    Id = s.Id,
+                    Id =s.Id,
                     Nombre = s.Nombre,
                     Extension = s.Extension,
                     Tamanio = s.Tamanio,
