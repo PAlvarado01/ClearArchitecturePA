@@ -26,6 +26,7 @@ namespace NorthWind.Repositories.EFCore.Repositories
         {
             File.WriteAllBytes($"{destLocalPath}{fileName}", Convert.FromBase64String(base64));
         }
+
         public IEnumerable<Archivo> GetBulkLoadByEspecification(Specification<Archivo> specification)
         {
             var expressionDelegate = specification.Expression.Compile();

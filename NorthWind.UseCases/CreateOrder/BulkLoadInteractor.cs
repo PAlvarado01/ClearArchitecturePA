@@ -11,6 +11,9 @@ using NorthWind.UseCasesDTOs.BulkLoad;
 using NorthWind.UseCasesPorts.BulkLoad;
 using NorthWind.Entities.Exceptions;
 using NorthWind.Entities.Specifications;
+using System.Text;
+using NorthWind.UseCases.Common.Validators;
+using FluentValidation;
 
 namespace NorthWind.UseCases.CreateOrder
 {
@@ -19,13 +22,17 @@ namespace NorthWind.UseCases.CreateOrder
         readonly IBulkLoadOutputPort outputPort;
         readonly IUnitOfWork unitOfWork;
         readonly IBulkLoadRepository bulkLoadRepository;
+        readonly IProductRepository productRepository;
+        readonly IEnumerable<IValidator<Archivo>> validators;
 
-        public BulkLoadInteractor(IBulkLoadOutputPort outputPort, IUnitOfWork unitOfWork, IBulkLoadRepository bulkLoadRepository)
+        public BulkLoadInteractor(IBulkLoadOutputPort outputPort, IUnitOfWork unitOfWork, IBulkLoadRepository bulkLoadRepository, IProductRepository productRepository, IEnumerable<IValidator<Archivo>> validators)
         {
             this.outputPort = outputPort;
             this.unitOfWork = unitOfWork;
             this.bulkLoadRepository = bulkLoadRepository;
-        }      
+            this.productRepository = productRepository;
+            this.validators = validators;
+        }
 
         public async Task Handle(IFormFile file)
         {
@@ -50,25 +57,40 @@ namespace NorthWind.UseCases.CreateOrder
                 Ubicacion = filePath
             };
 
+            //VALIDACION
+            //await Validator<Archivo>.Validate(Files, validators);
+
             bulkLoadRepository.Create(Files);
             
             //Leer Archivo
-            StreamReader sr = new StreamReader(filePath);
+            int countRow = 0;
 
-            string line = sr.ReadLine();
-            string[] separar = line.Split(new char[] { ' ' });
+            FileInfo fileInfo = new FileInfo(filePath);
+            StreamReader sr = new StreamReader(filePath,Encoding.UTF8);
 
-            /*foreach (string palabra in separar)
+            using (sr = fileInfo.OpenText())
             {
-                Console.WriteLine(palabra);
-            }*/
-
-            TextReader Leer = new StreamReader(line);
-
-            Console.WriteLine(Leer.ReadToEnd());
-
-            bulkLoadRepository.Upload(file.FileName, Files.ToString(), "C:\\Images\\");
-
+                string line = string.Empty;
+                while ((line = sr.ReadLine()) != null)
+                {
+                    if (countRow == 0) 
+                    {
+                        var ObtenerFila = line.Split(',');
+                        if (string.IsNullOrEmpty(ObtenerFila[0].Split('\r')[0].Trim()))
+                        {
+                            continue;        
+                        }
+                        foreach (var palabra in ObtenerFila)
+                        {
+                            productRepository.Create(new Product
+                            {
+                                Name = ObtenerFila[0],
+                            });
+                        }
+                    }                   
+                }                
+            }
+            
             try
             {                
                 await unitOfWork.SaveChangesAsync();

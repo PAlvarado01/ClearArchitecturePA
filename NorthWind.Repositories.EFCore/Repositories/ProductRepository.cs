@@ -16,6 +16,11 @@ namespace NorthWind.Repositories.EFCore.Repositories
             this.context = context;
         }
 
+        public void Create(Product producto)
+        {
+            context.Add(producto);
+        }
+
         public IEnumerable<Product> GetProductsByEspecification(Specification<Product> specification)
         {
             var expressionDelegate = specification.Expression.Compile();
